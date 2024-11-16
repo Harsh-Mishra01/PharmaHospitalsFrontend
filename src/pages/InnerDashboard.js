@@ -30,14 +30,18 @@ export default function Dashboard(props) {
   const [getInsightsCity, setInsightsCity] = useState([]);
   const [contextHospitals, setcontextHospitals] = useState();
   const mail = localStorage.getItem("mail");
-
+  const api = localStorage.getItem("API");
   const username1 = localStorage.getItem("username");
   const psw1 = localStorage.getItem("psw");
 
+  const monthsCalls = showAllData?.graphDataCalls?.[0]
+    ? Object.keys(showAllData.graphDataCalls[0])
+    : [];
+  console.log("Months for Calls:", monthsCalls);
 
   async function getAllData(branch) {
     try {
-      const response = await fetch(` http://localhost:2024/api/manipal/${branch}`);
+      const response = await fetch(` http://localhost:2024/api/microlabs/${branch}`);
       const data = await response.json();
       console.log("1234 : "+data[0])
       setAllData(data);
@@ -49,11 +53,19 @@ export default function Dashboard(props) {
 
   async function getMonthData(month) {
     try {
-      const response = await fetch(`http//:localhost:2024/monthdata/${month}`);
+     
+      const response = await fetch(`${api}/monthdata`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ month: month, branch: contextHospitals }),
+      });
       const data = await response.json();
+      setAllData("");
       setAllData(data);
-      // console.log( "+++++++++++++++++ data:" + data.reviewRating[0].averagerating);
-      // console.log(  "333333333333 data:" + data.analysis[0]);
+      console.log( "+++++++++++++++++ data:" + data.reviewRating[0].averagerating);
+       console.log(  "333333333333 data:" + data.analysis[0]);
     } catch (error) {
       console.error("Error fetching all data:", error);
     }
@@ -89,7 +101,7 @@ export default function Dashboard(props) {
     async function getAnalysisData() {
       try {
         const response = await fetch(
-          "http://localhost:2030/api/login",
+          "http://localhost:2024/api/login",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -179,7 +191,8 @@ export default function Dashboard(props) {
         username={username}
         serach={mail === "manipal@gmail.com" ? true : false}
         topdoc={true}
-        monthfilter={true}
+          monthfilter={true}
+          monthsCalls={monthsCalls}
       />
       {use && <ContentContainer data={use} />}
       <div className="second-container m-4"

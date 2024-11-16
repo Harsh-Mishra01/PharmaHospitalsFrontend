@@ -16,7 +16,7 @@ const Login = () => {
   async function signin(e) {
     e.preventDefault();
 
-    const loginHandler = await fetch("http://localhost:2030/api/login", {
+    const loginHandler = await fetch("http://localhost:2024/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,8 +27,9 @@ const Login = () => {
     if (response.length > 0) {
       localStorage.setItem("username", cred.username);
       localStorage.setItem("psw", cred.psw);
-      localStorage.setItem("image", response[0].image);
+      localStorage.setItem("logo", response[0].Logo);
       localStorage.setItem("user", response[0].user);
+      localStorage.setItem("API", response[0].API);
 
 
       navigate("/Dashboard");
@@ -48,11 +49,11 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 to-sky-200">
       {/* Doodle Image */}
-      <img
+      {/* <img
         src={DoodleImage}
         alt="logo"
         className="w-28 mb-8 animate-fade-in"
-      />
+      /> */}
 
       <div className="relative flex flex-col items-center w-11/12 max-w-md p-8 bg-white rounded-3xl shadow-lg sm:w-96 overflow-hidden">
         {/* Floating Decorative Elements */}

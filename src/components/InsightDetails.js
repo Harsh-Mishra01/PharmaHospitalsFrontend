@@ -1,39 +1,55 @@
 import React, { useEffect, useState, useContext } from "react";
-//import "../stylesheets/docreport.css";
+import "../stylesheet/docreport.css";
+import TableComponent from "../components/TableComponent";
 import { SharedContext } from "../context/SharedContext";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { ShimmerThumbnail, ShimmerTitle } from "react-shimmer-effects";
 
-import DoctorTableComponent from "../components/DoctorTableComponent";
 
-export default function TopDoctorDetails({contextHospitals }) {
+export default function BasicDetailsComponent() {
   const [docData, setDocData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [insightdata, setInsightData] = useState(null);
-  
- 
-  const { getDrName, getInsightState, getInsightsCity} =  useContext(SharedContext);
-    
+
+  const { getDrName, getInsightState, getInsightsCity, contextHospitals } = useContext(SharedContext);
   const api = localStorage.getItem("API");
 
- 
-
-    useEffect(() => { 
-        console.log("getInsightState" + getInsightState + "getInsighCity : " + getInsightsCity + "getContextHospitals : "+contextHospitals);
-    })
-    
 
 
+  // Fetch doctor data when getDrName changes
+  useEffect(() => {
+    if (getDrName) {
+      async function fetchDocData() {
+        try {
+          const response = await fetch(`${api}/docData`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ businessName: getDrName }),
+          });
+          const data = await response.json();
+          setDocData(data);
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Error fetching doctor data:", error);
+        }
+      }
+      fetchDocData();
+    }
+  }, [getDrName]);
+
+  // Fetch filtered data when getInsightState or getInsightsCity changes
   useEffect(() => {
     async function fetchDataFilter() {
-
+      console.log("789: : "+getInsightState)
       const location = contextHospitals ? contextHospitals : getInsightsCity;
       const cluster = contextHospitals ? "" : getInsightState;
 
       if (getInsightState || getInsightsCity || contextHospitals) {
-        console.log("Hello"+ 1)
         try {
-          const response = await fetch(`http://localhost:2024/api/microlabs/topdoc`, {
+          const response = await fetch(`${api}/datafilter`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -45,7 +61,7 @@ export default function TopDoctorDetails({contextHospitals }) {
           });
           const data = await response.json();
           setInsightData(data);
-          if (getInsightState.length > 0 || getInsightsCity.length > 0 || contextHospitals > 0) {
+          if (contextHospitals.length > 0 || getInsightState > 0 || getInsightsCity > 0 ) {
             setIsLoading(false);
           }
           // setIsLoading(false)
@@ -55,33 +71,16 @@ export default function TopDoctorDetails({contextHospitals }) {
       }
     }
     fetchDataFilter();
-  }, [getInsightState, getInsightsCity, contextHospitals]);
-    
-    
-       
- useEffect(() => {
-    async function fetchTopDocdata() {
-        try {
-          const response = await fetch(`http://localhost:2024/api/microlabs/topdoc`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            
-          });
-          const data = await response.json();
-          setInsightData(data);
-       
-           setIsLoading(false)
-        } catch (error) {
-          console.error("Error fetching filtered data:", error);
-        }
-      
-    }
-    fetchTopDocdata();
-}, []);
+  }, [getInsightsCity, getInsightState, contextHospitals]);
 
+  // Handle loading state
+  // useEffect(() => {
+  //   if (docData || insightdata) {
+  //     setIsLoading(false);
+  //   }
+  // }, [docData, insightdata]);
 
+  // Prepare rows for TableComponent
   const rows = docData?.result
     ? [docData.result]
     : insightdata
@@ -127,20 +126,42 @@ export default function TopDoctorDetails({contextHospitals }) {
           <ShimmerTitle line={2} gap={10} variant="primary" /> */}
         </div>
       ) : (
-        (getDrName || getInsightState || getInsightsCity || contextHospitals  ) && (
+        (getDrName || getInsightState || getInsightsCity || contextHospitals) && (
           <div
             id="capture"
-        
+          
           >
             {docData ? (
-              <div className="maniContainer m-3 ">
-                
+              <div className="maniContainer p-3 m-3">
+                <div className="details">
+                  <div className="basi-details">
+                    <div className="head p-2">
+                      <span>Dr Name: </span>
+                      <br />
+                      <span>Dr Mobile: </span>
+                    </div>
+                    <div className="content p-2">
+                      {docData?.finalDetails?.[0] && (
+                        <>
+                          <span>{docData.finalDetails[0].name}</span>
+                          <br />
+                          <span>{docData.finalDetails[0].phone}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="p-2 download">
+                    <button className="download-btn" onClick={downloadPDF}>
+                      Download Report
+                    </button>
+                  </div>
+                </div>
                 {rows.length > 0 && (
-                  <DoctorTableComponent
+                  <TableComponent
                     bcolor="white"
                     title="Monthly Improvement Report"
                     head={[
-                      "Dr. Name",
+                      "Month",
                       "GS - Mobile",
                       "GS - Desktop",
                       "GM - Mobile",
@@ -154,13 +175,20 @@ export default function TopDoctorDetails({contextHospitals }) {
                 )}
               </div>
             ) : (
-              <div className="maniContainer m-3">
+              <div className="maniContainer p-3 m-3">
+                <div className="details">
+                  <div className="p-2 download">
+                    <button className="download-btn" onClick={downloadPDF}>
+                      Download Report
+                    </button>
+                  </div>
+                </div>
                 {rows.length > 0 && (
-                  <DoctorTableComponent
+                  <TableComponent
                     bcolor="white"
                     title="Monthly Improvement Report"
                     head={[
-                      "Dr. Name",
+                      "Month",
                       "GS - Mobile",
                       "GS - Desktop",
                       "GM - Mobile",

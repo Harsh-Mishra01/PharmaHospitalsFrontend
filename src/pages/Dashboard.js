@@ -1,26 +1,16 @@
 import * as React from "react";
-import { extendTheme, styled } from "@mui/material/styles";
+import { experimental_extendTheme as extendTheme, styled } from "@mui/material/styles"; // updated import
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import BarChartIcon from "@mui/icons-material/BarChart";
-import DescriptionIcon from "@mui/icons-material/Description";
 import BackupTableIcon from "@mui/icons-material/BackupTable";
-import LayersIcon from "@mui/icons-material/Layers";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
-import { PageContainer } from "@toolpad/core/PageContainer";
-import Grid from "@mui/material/Grid2";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
 import "../stylesheet/Dashboard.css";
-import { NewMenuBar } from "../components/FilterPopover";
-import Navbar from "../components/Navbar";
 import DocReport from "./Doc-Report";
 import InnerDashboard from "./InnerDashboard";
-import { Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../stylesheet/Dashboard.css"
+import Insights from "./Insights";
 
 const NAVIGATION = [
   {
@@ -32,40 +22,51 @@ const NAVIGATION = [
     title: "Dashboard",
     icon: <DashboardIcon />,
   },
+  
   {
     segment: "DocReport",
     title: "Doc-Report",
     icon: <BackupTableIcon />,
   },
   {
-    kind: "divider",
-  },
-  {
-    kind: "header",
-    title: "Analytics",
-  },
-  {
-    segment: "reports",
-    title: "Reports",
+    segment: "insights",
+    title: "Insights",
     icon: <BarChartIcon />,
-    children: [
-      {
-        segment: "sales",
-        title: "Sales",
-        icon: <DescriptionIcon />,
-      },
-      {
-        segment: "traffic",
-        title: "Profiles",
-        icon: <DescriptionIcon />,
-      },
-    ],
   },
-  {
-    segment: "integrations",
-    title: "Matrics",
-    icon: <LayersIcon />,
-  },
+  // {
+  //   segment: "matrics",
+  //   title: "Matrics",
+  //   icon: <LayersIcon />,
+  // },
+  // {
+  //   kind: "divider",
+  // },
+  // {
+  //   kind: "header",
+  //   title: "Analytics",
+  // },
+  // {
+  //   segment: "reports",
+  //   title: "Reports",
+  //   icon: <BarChartIcon />,
+  //   children: [
+  //     {
+  //       segment: "sales",
+  //       title: "Sales",
+  //       icon: <DescriptionIcon />,
+  //     },
+  //     {
+  //       segment: "traffic",
+  //       title: "Profiles",
+  //       icon: <DescriptionIcon />,
+  //     },
+  //   ],
+  // },
+  // {
+  //   segment: "integrations",
+  //   title: "Matrics",
+  //   icon: <LayersIcon />,
+  // },
 ];
 
 const demoTheme = extendTheme({
@@ -95,13 +96,6 @@ function useDemoRouter(initialPath) {
   return router;
 }
 
-const Skeleton = styled("div")(({ theme, height }) => ({
-  backgroundColor: theme.palette.action.hover,
-  borderRadius: theme.shape.borderRadius,
-  height,
-  content: "sdisdjeifn",
-}));
-
 const CustomDashboardLayout = styled(DashboardLayout)(({ theme }) => ({
   ".css-1je49cu-MuiTypography-root": {
     display: "none",
@@ -116,7 +110,7 @@ export default function DashboardLayoutBasic(props) {
     user: {
       name: localStorage.getItem("user"),
       email: localStorage.getItem("username"),
-      image: localStorage.getItem("image"),
+      image: localStorage.getItem("logo"),
     },
   });
 
@@ -127,65 +121,60 @@ export default function DashboardLayoutBasic(props) {
           user: {
             name: localStorage.getItem("user"),
             email: localStorage.getItem("username"),
-            image: localStorage.getItem("image"),
+            image: localStorage.getItem("logo"),
           },
         });
       },
       signOut: () => {
-          setSession(null);
-          localStorage.removeItem("username");
-          localStorage.removeItem("psw");
-          console.log("logged out before navifated");
-          navigate("/");
-          console.log("User logged out");
+        setSession(null);
+        localStorage.removeItem("username");
+        localStorage.removeItem("psw");
+        navigate("/");
       },
     };
   }, []);
 
   const router = useDemoRouter("/dashboard");
 
-  console.log(router.pathname);
-  console.log(router.navigate);
-
   const navigate = useNavigate();
-
-  // Handle logout button click
-//   const handleLogout = () => {
-//     localStorage.removeItem("username");
-//     localStorage.removeItem("psw");
-//     console.log("logged out before navifated");
-//     navigate("/");
-//     console.log("User logged out");
-//   };
 
   function DemoPageContent({ pathname, navigate }) {
     if (pathname === "/dashboard") {
       return <InnerDashboard />;
     } else if (pathname === "/DocReport") {
       return <DocReport />;
+    }  else if (pathname === "/insights") {
+      return <Insights/>;
     }
     return <InnerDashboard />;
   }
+  const CustomDashboardLayout = styled(DashboardLayout)(({ theme }) => ({
+    ".MuiThemeSwitcher-root": {
+      display: "none", // Hides the theme switcher
+    },
+  }));
+  
 
   return (
     <AppProvider
-      session={session}
-      authentication={authentication}
-      navigation={NAVIGATION}
-      branding={{
-        //logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
-        title: "MultiplierHospitals",
-      }}
-      router={router}
-      theme={demoTheme}
-    >
-      <DashboardLayout>
-        
-        <DemoPageContent
-          pathname={router.pathname}
-          navigate={router.navigate}
-        />
-      </DashboardLayout>
-    </AppProvider>
+    session={session}
+    authentication={authentication}
+    navigation={NAVIGATION}
+    branding={{
+      logo: <img src="https://indiancattle.com/wp-content/uploads/2017/08/logo-10.png" alt="Microbabs logo" />,
+      title: "MicroLabs",
+      color: "#A19EC9",
+    }}
+    router={router}
+    theme={demoTheme}
+  >
+    <CustomDashboardLayout>
+      <DemoPageContent
+        pathname={router.pathname}
+        navigate={router.navigate}
+      />
+    </CustomDashboardLayout>
+  </AppProvider>
+  
   );
 };

@@ -34,7 +34,7 @@ export default function CardContainer(props) {
     'Searches' : 'bi-search',
   };
 
-  console.log("%%%%%%%%%%%@#@#@#"+props.body)
+ // console.log("%%%%%%%%%%%@#@#@#"+props.body)
   return (
     <>
       <div className="view-counts ">

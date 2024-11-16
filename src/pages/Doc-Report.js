@@ -1,10 +1,22 @@
-import React from "react";
+import React, { Fragment, useState } from "react";
+import Navbar from "../components/Navbar";
 
-export default function DocReport( value) {
+import BasicDetailsComponent from "../components/BasicDetailsComponent";
+import { SharedContext } from "../context/SharedContext";
+export default function DocReport() {
+  var username;
 
-    return (
-        <div>
-            <h1>Hello World for DocReport</h1>
-        </div>
-    ) 
+  const mail = localStorage.getItem("mail");
+
+
+  const [getDrName, setDrName] = useState("");
+
+  return (
+    <Fragment>
+      <SharedContext.Provider value={{ getDrName, setDrName}}>
+        <Navbar username={username} serach={mail === "manipal@gmail.com" ? true : false} docreport={true} ></Navbar>
+        <BasicDetailsComponent></BasicDetailsComponent>
+      </SharedContext.Provider>
+    </Fragment>
+  );
 }
