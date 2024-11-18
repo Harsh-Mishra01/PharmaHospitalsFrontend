@@ -29,6 +29,8 @@ export default function Dashboard(props) {
   const [getInsightState, setInsightsState] = useState([]);
   const [getInsightsCity, setInsightsCity] = useState([]);
   const [contextHospitals, setcontextHospitals] = useState();
+  const [isFetching, setIsFetching] = useState(false);
+
   const mail = localStorage.getItem("mail");
   const api = localStorage.getItem("API");
   const username1 = localStorage.getItem("username");
@@ -39,13 +41,17 @@ export default function Dashboard(props) {
     : [];
   console.log("Months for Calls:", monthsCalls);
 
+
+  
+
+
   async function getAllData(branch) {
     try {
       const response = await fetch(` http://localhost:2024/api/microlabs/${branch}`);
       const data = await response.json();
-      console.log("1234 : "+data[0])
+      console.log("1234 : " + data[0])
       setAllData(data);
-      console.log( "+++++++++++++++++ data:" + data.reviewRating[0].averagerating);
+      console.log("+++++++++++++++++ data:" + data.reviewRating[0].averagerating);
     } catch (error) {
       console.error("Error fetching all data:", error);
     }
@@ -64,8 +70,8 @@ export default function Dashboard(props) {
       const data = await response.json();
       setAllData("");
       setAllData(data);
-      console.log( "+++++++++++++++++ data:" + data.reviewRating[0].averagerating);
-       console.log(  "333333333333 data:" + data.analysis[0]);
+      console.log("+++++++++++++++++ data:" + data.reviewRating[0].averagerating);
+      console.log("333333333333 data:" + data.analysis[0]);
     } catch (error) {
       console.error("Error fetching all data:", error);
     }
@@ -108,8 +114,8 @@ export default function Dashboard(props) {
             body: JSON.stringify({ username: username1, psw: psw1 }),
           }
         );
-          const result = await response.json();
-            console.log(  "333333333333 data:" + result[0]);
+        const result = await response.json();
+        console.log("333333333333 data:" + result[0]);
         setAnalysisData(result);
       } catch (error) {
         console.error("Error fetching analysis data:", error);
@@ -138,8 +144,8 @@ export default function Dashboard(props) {
         },
         { "Verified Profiles": locationProfiles[0]["Verified Profiles"] },
         { "Unverified Profiles": locationProfiles[0]["Unverfied Profiles"] },
+        { "Need Access": locationProfiles[0]["Need Access"] },
         { "Not Intrested": locationProfiles[0]["Not Intrested"] },
-        { "Out of Organization": locationProfiles[0]["Total Profiles"] },
       ];
       setUse(verificationData);
     } else if (analysisData && analysisData[0]) {
@@ -147,25 +153,71 @@ export default function Dashboard(props) {
         { "Total Profiles": analysisData[0]["Total Profiles"] },
         { "Verified Profiles": analysisData[0]["Total Verified"] },
         { "Unverified Profiles": analysisData[0]["Unverified"] },
+        { "Need Access": analysisData[0]["Need Access"]},
         { "Not Intrested": analysisData[0]["Not Intrested"] },
-        { "Out of Organization": analysisData[0]["Total Profiles"] },
       ];
       setUse(verificationData);
     }
   }, [analysisData, locationProfiles]);
 
+ 
   useEffect(() => {
-    //console.log("getContextCity@@@@@@@@ : "+contextCity);
-    if (contextCity) {
-      getAllData(contextCity);
-    }
-    if (contextMonth) {
-      getMonthData(contextMonth);
-    }
-    if (contextHospitals) { 
-      getAllData(contextHospitals)
-    }
+    const fetchData = async () => {
+      setIsFetching(true);
+      try {
+        if (contextCity) {
+          await getAllData(contextCity);
+        }
+        if (contextMonth) {
+          await getMonthData(contextMonth);
+        }
+        if (contextHospitals) {
+          await getAllData(contextHospitals);
+        }
+      } catch (error) {
+        console.error("Error during data fetching:", error);
+      } finally {
+        setTimeout(() => setIsFetching(false), 500); // Ensures spinner is shown for 2 seconds
+      }
+    };
+  
+    fetchData();
   }, [contextCity, contextMonth, contextHospitals]);
+
+  const SpinnerOverlay = () => (
+    <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(255, 255, 255, 0.5)", // Slight transparency
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999,
+        backdropFilter: "blur(1px)", // Apply blur effect
+    }}>
+        <div className="spinner"></div>
+        {/* CSS for spinner */}
+        <style>{`
+          .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+          }
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+    </div>
+  );
+  
+  
 
 
 
@@ -173,100 +225,95 @@ export default function Dashboard(props) {
 
   return (
     <SharedContext.Provider
-    value={{
-      contextCity,
-      setContextCity,
-      locationProfiles,
-      setLocationProfiles,
-      setContextMonth,
-      getInsightState,
-      setInsightsState,
-      getInsightsCity,
-      setInsightsCity,
-      setcontextHospitals
-    }}
-  >
-    <div className="Container-fluid" style={{ background: "#EFEFEF" }}>
-      <Navbar
-        username={username}
-        serach={mail === "manipal@gmail.com" ? true : false}
-        topdoc={true}
+      value={{
+        contextCity,
+        setContextCity,
+        locationProfiles,
+        setLocationProfiles,
+        setContextMonth,
+        getInsightState,
+        setInsightsState,
+        getInsightsCity,
+        setInsightsCity,
+        setcontextHospitals,
+      }}
+    >
+      <div className="Container-fluid" style={{ background: "#EFEFEF" }}>
+        {isFetching && <SpinnerOverlay />} {/* Show spinner when fetching */}
+        <Navbar
+          username={username}
+          serach={mail === "manipal@gmail.com" ? true : false}
+          topdoc={true}
           monthfilter={true}
           monthsCalls={monthsCalls}
-      />
-      {use && <ContentContainer data={use} />}
-      <div className="second-container m-4"
-      
-      >
-        <div className="left-container m-2">
-          {showAllData  && (
-            <ReviewRating
-              review={showAllData?.reviewRating[0]?.totalreviews}
-              rating={showAllData?.reviewRating[0]?.averagerating}
-            />
-          )}
-        </div>
-        {showAllData && <SideContentContainer data={showAllData.analysis} />}
+        />
+        {/* <div className="d-block justify-content-center"> */}
+        {use && <ContentContainer data={use} />}
+        <div className="second-container m-4 ps-4 ">
+          <div className="left-container m-2">
+            {showAllData && (
+              <ReviewRating
+                review={showAllData?.reviewRating[0]?.totalreviews}
+                rating={showAllData?.reviewRating[0]?.averagerating}
+              />
+            )}
+          </div>
+          {showAllData && <SideContentContainer data={showAllData.analysis} />}
+          </div>
+          {/* </div> */}
+        <TopDoctor contextHospitals={contextHospitals} />
+        {/* <div className="grapharea p-4">
+          <div className="right-container ">
+            {isLoading ? (
+              <ShimmerThumbnail height={420} width={2000} rounded />
+            ) : (
+              showAllData && (
+                <>
+                  <GraphicalContainer
+                    gtype={"ColumnChart"}
+                    title={"Calls"}
+                    callsGraphData={showAllData.graphDataCalls[0]}
+                    bcolor={"#FFFFFF"}
+                    width={"50%"}
+                  />
+                  <GraphicalContainer
+                    gtype={"ColumnChart"}
+                    title={"Searches"}
+                    callsGraphData={showAllData.graphDataSearches[0]}
+                    bcolor={"#FFFFFF"}
+                    width={"50%"}
+                  />
+                </>
+              )
+            )}
+          </div>
+          <div className="right-container ">
+            {isLoading ? (
+              <ShimmerThumbnail height={420} width={2000} rounded />
+            ) : (
+              showAllData && (
+                <>
+                  <GraphicalContainer
+                    gtype={"ColumnChart"}
+                    title={"Mobile Searches"}
+                    callsGraphData={showAllData.graphDataSearchesMobils[0]}
+                    bcolor={"#FFFFFF"}
+                    width={"50%"}
+                  />
+                  <GraphicalContainer
+                    gtype={"ColumnChart"}
+                    title={"Website Clicks"}
+                    callsGraphData={showAllData.graphDataWebsiteClicks[0]}
+                    bcolor={"#FFFFFF"}
+                    width={"50%"}
+                  />
+                </>
+              )
+            )}
+          </div>
+        </div> */}
+        <br />
       </div>
-
-      <div></div>
-
-      <TopDoctor contextHospitals={contextHospitals}></TopDoctor>
-      <div
-        className="grapharea p-4"
-       
-      >
-        <div className="right-container ">
-          {isLoading ? (
-            <ShimmerThumbnail height={420} width={2000} rounded />
-          ) : (
-            showAllData && (
-              <>
-                <GraphicalContainer
-                  gtype={"ColumnChart"}
-                  title={"Calls"}
-                  callsGraphData={showAllData.graphDataCalls[0]}
-                  bcolor={"#FFFFFF"}
-                  width={"50%"}
-                />
-                <GraphicalContainer
-                  gtype={"ColumnChart"}
-                  title={"Searches"}
-                  callsGraphData={showAllData.graphDataSearches[0]}
-                  bcolor={"#FFFFFF"}
-                  width={"50%"}
-                />
-              </>
-            )
-          )}
-        </div>
-        <div className="right-container ">
-          {isLoading ? (
-            <ShimmerThumbnail height={420} width={2000} rounded />
-          ) : (
-            showAllData && (
-              <>
-                <GraphicalContainer
-                  gtype={"ColumnChart"}
-                  title={"Mobile Searches"}
-                  callsGraphData={showAllData.graphDataSearchesMobils[0]}
-                  bcolor={"#FFFFFF"}
-                  width={"50%"}
-                />
-                <GraphicalContainer
-                  gtype={"ColumnChart"}
-                  title={"Website Clicks"}
-                  callsGraphData={showAllData.graphDataWebsiteClicks[0]}
-                  bcolor={"#FFFFFF"}
-                  width={"50%"}
-                />
-              </>
-            )
-          )}
-        </div>
-      </div>
-      <br />
-    </div>
-  </SharedContext.Provider>
+    </SharedContext.Provider>
   );
 }

@@ -9,7 +9,7 @@ import "../stylesheet/Dashboard.css";
 import DocReport from "./Doc-Report";
 import InnerDashboard from "./InnerDashboard";
 import { useNavigate } from "react-router-dom";
-import "../stylesheet/Dashboard.css"
+import "../stylesheet/Dashboard.css";
 import Insights from "./Insights";
 
 const NAVIGATION = [
@@ -22,7 +22,6 @@ const NAVIGATION = [
     title: "Dashboard",
     icon: <DashboardIcon />,
   },
-  
   {
     segment: "DocReport",
     title: "Doc-Report",
@@ -33,40 +32,6 @@ const NAVIGATION = [
     title: "Insights",
     icon: <BarChartIcon />,
   },
-  // {
-  //   segment: "matrics",
-  //   title: "Matrics",
-  //   icon: <LayersIcon />,
-  // },
-  // {
-  //   kind: "divider",
-  // },
-  // {
-  //   kind: "header",
-  //   title: "Analytics",
-  // },
-  // {
-  //   segment: "reports",
-  //   title: "Reports",
-  //   icon: <BarChartIcon />,
-  //   children: [
-  //     {
-  //       segment: "sales",
-  //       title: "Sales",
-  //       icon: <DescriptionIcon />,
-  //     },
-  //     {
-  //       segment: "traffic",
-  //       title: "Profiles",
-  //       icon: <DescriptionIcon />,
-  //     },
-  //   ],
-  // },
-  // {
-  //   segment: "integrations",
-  //   title: "Matrics",
-  //   icon: <LayersIcon />,
-  // },
 ];
 
 const demoTheme = extendTheme({
@@ -96,8 +61,13 @@ function useDemoRouter(initialPath) {
   return router;
 }
 
+// Customizing DashboardLayout to hide the theme switcher
 const CustomDashboardLayout = styled(DashboardLayout)(({ theme }) => ({
-  ".css-1je49cu-MuiTypography-root": {
+  ".MuiThemeSwitcher-root": {
+    display: "none", // Hides the theme switcher
+  },
+  // Include additional class names if necessary
+  ".css-1ozwjt9-MuiThemeSwitcher-root": {
     display: "none",
   },
 }));
@@ -143,38 +113,31 @@ export default function DashboardLayoutBasic(props) {
       return <InnerDashboard />;
     } else if (pathname === "/DocReport") {
       return <DocReport />;
-    }  else if (pathname === "/insights") {
-      return <Insights/>;
+    } else if (pathname === "/insights") {
+      return <Insights />;
     }
     return <InnerDashboard />;
   }
-  const CustomDashboardLayout = styled(DashboardLayout)(({ theme }) => ({
-    ".MuiThemeSwitcher-root": {
-      display: "none", // Hides the theme switcher
-    },
-  }));
-  
-
+ const logo = localStorage.getItem("logo")
   return (
     <AppProvider
-    session={session}
-    authentication={authentication}
-    navigation={NAVIGATION}
-    branding={{
-      logo: <img src="https://indiancattle.com/wp-content/uploads/2017/08/logo-10.png" alt="Microbabs logo" />,
-      title: "MicroLabs",
-      color: "#A19EC9",
-    }}
-    router={router}
-    theme={demoTheme}
-  >
-    <CustomDashboardLayout>
-      <DemoPageContent
-        pathname={router.pathname}
-        navigate={router.navigate}
-      />
-    </CustomDashboardLayout>
-  </AppProvider>
-  
+      session={session}
+      authentication={authentication}
+      navigation={NAVIGATION}
+      branding={{
+        logo: <img src={ logo} alt="Microbabs logo" />,
+        title: "MicroLabs",
+        color: "#A19EC9",
+      }}
+      router={router}
+      theme={demoTheme}
+    >
+      <CustomDashboardLayout >
+        <DemoPageContent
+          pathname={router.pathname}
+          navigate={router.navigate}
+        />
+      </CustomDashboardLayout>
+    </AppProvider>
   );
-};
+}

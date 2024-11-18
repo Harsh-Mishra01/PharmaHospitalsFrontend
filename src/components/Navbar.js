@@ -345,14 +345,17 @@ function bulkExport() {
             </div>
           
             <div
-              className="datepicker me-3.5"
+              className="datepicker "
               style={{ display: props.monthfilter ? "block" : "none" }}
             >
               <div className="data_list_selection m-1">
                 <div className="input-group">
                   <select
                     value={getMonth}
-                    onChange={monthHandelar}
+                    onChange={(e) => {
+                      monthHandelar(e); 
+                      monthseter();     
+                    }}
                     onInputCapture={monthHandelar}
                     style={{
                       width: "80%",

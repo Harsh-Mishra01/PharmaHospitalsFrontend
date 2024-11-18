@@ -12,7 +12,7 @@ export default function ContentContainer(props) {
   return (
     <Fragment>
       <div
-        className="content-container-2 ms-4 me-4"
+        className="content-container-2 ms-5 me-4"
        
       >
         {props.data.map((item) => {

@@ -133,7 +133,7 @@ export default function TopDoctorDetails({contextHospitals }) {
         
           >
             {docData ? (
-              <div className="maniContainer m-3 ">
+              <div className="maniContainer  ">
                 
                 {rows.length > 0 && (
                   <DoctorTableComponent
@@ -141,13 +141,13 @@ export default function TopDoctorDetails({contextHospitals }) {
                     title="Monthly Improvement Report"
                     head={[
                       "Dr. Name",
+                      "Phone Calls",
+                      "Directions Clicks",
+                      "Website Clicks",
                       "GS - Mobile",
                       "GS - Desktop",
                       "GM - Mobile",
                       "GM - Desktop",
-                      "Website Clicks",
-                      "Directions Clicks",
-                      "Phone Calls",
                     ]}
                     rows={rows}
                   />
@@ -161,13 +161,14 @@ export default function TopDoctorDetails({contextHospitals }) {
                     title="Monthly Improvement Report"
                     head={[
                       "Dr. Name",
+                      "Phone Calls",
+                      "Directions Clicks",
+                      "Website Clicks",
                       "GS - Mobile",
                       "GS - Desktop",
                       "GM - Mobile",
                       "GM - Desktop",
-                      "Website Clicks",
-                      "Directions Clicks",
-                      "Phone Calls",
+                      
                     ]}
                     rows={rows}
                   />
