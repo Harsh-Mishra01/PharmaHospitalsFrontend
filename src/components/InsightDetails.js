@@ -89,6 +89,57 @@ export default function BasicDetailsComponent() {
 
   // Function to download PDF
   const downloadPDF = () => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     const input = document.querySelector("#capture");
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
