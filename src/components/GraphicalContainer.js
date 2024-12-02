@@ -31,7 +31,7 @@ export default function GraphicalContainer(props) {
     <>
           <div  className="graphical-container m-2" style={{ backgroundColor: ( props.bcolor ),}}>
           <div className="graphs">Last 6 Months - {props.title}</div>
-            <center className="m-4">{count}</center>
+            <center className="m-4">Avg - {(count/6).toFixed(0)}</center>
             <Chart chartType={props.gtype} chartWrapperParams={{ width: '1000px', height: '1200px',  }} data={data} options={options}></Chart>
           </div>
     </>

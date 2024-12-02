@@ -1,5 +1,5 @@
 import * as React from "react";
-import { experimental_extendTheme as extendTheme, styled } from "@mui/material/styles"; // updated import
+import { experimental_extendTheme as extendTheme, styled } from "@mui/material/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import BackupTableIcon from "@mui/icons-material/BackupTable";
@@ -9,8 +9,9 @@ import "../stylesheet/Dashboard.css";
 import DocReport from "./Doc-Report";
 import InnerDashboard from "./InnerDashboard";
 import { useNavigate } from "react-router-dom";
-import "../stylesheet/Dashboard.css";
 import Insights from "./Insights";
+import micrologo from "../assets/microlabslogo.png";
+import sitapridelogo from "../assets/sitapridelogo.png";
 
 const NAVIGATION = [
   {
@@ -61,26 +62,17 @@ function useDemoRouter(initialPath) {
   return router;
 }
 
-// Customizing DashboardLayout to hide the theme switcher
-const CustomDashboardLayout = styled(DashboardLayout)(({ theme }) => ({
-  ".MuiThemeSwitcher-root": {
-    display: "none", // Hides the theme switcher
-  },
-  // Include additional class names if necessary
-  ".css-1ozwjt9-MuiThemeSwitcher-root": {
-    display: "none",
-  },
-}));
-
 export default function DashboardLayoutBasic(props) {
   const { window } = props;
   const [searchQuery, setSearchQuery] = React.useState("");
+
+  const navigate = useNavigate();
 
   const [session, setSession] = React.useState({
     user: {
       name: localStorage.getItem("user"),
       email: localStorage.getItem("username"),
-      image: localStorage.getItem("logo"),
+      image: micrologo,
     },
   });
 
@@ -91,7 +83,7 @@ export default function DashboardLayoutBasic(props) {
           user: {
             name: localStorage.getItem("user"),
             email: localStorage.getItem("username"),
-            image: localStorage.getItem("logo"),
+            image: micrologo,
           },
         });
       },
@@ -102,42 +94,55 @@ export default function DashboardLayoutBasic(props) {
         navigate("/");
       },
     };
-  }, []);
+  }, [navigate]);
 
   const router = useDemoRouter("/dashboard");
 
-  const navigate = useNavigate();
-
   function DemoPageContent({ pathname, navigate }) {
-    if (pathname === "/dashboard") {
-      return <InnerDashboard />;
-    } else if (pathname === "/DocReport") {
-      return <DocReport />;
-    } else if (pathname === "/insights") {
-      return <Insights />;
+    switch (pathname) {
+      case "/dashboard":
+        return <InnerDashboard />;
+      case "/DocReport":
+        return <DocReport />;
+      case "/insights":
+        return <Insights />;
+      default:
+        return <InnerDashboard />;
     }
-    return <InnerDashboard />;
   }
- const logo = localStorage.getItem("logo")
+
+  const logo = localStorage.getItem("logo");
+
   return (
     <AppProvider
       session={session}
       authentication={authentication}
       navigation={NAVIGATION}
       branding={{
-        logo: <img src={ logo} alt="Microbabs logo" />,
-        title: "MicroLabs",
+        logo: (
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <img src={micrologo} alt="Microlabs logo" style={{ height: "40px" }} />
+            <img src={sitapridelogo} alt="Sitapride logo" style={{ height: "40px" }} />
+          </div>
+        ),
+        title: " ",
         color: "#A19EC9",
       }}
       router={router}
       theme={demoTheme}
     >
-      <CustomDashboardLayout >
-        <DemoPageContent
-          pathname={router.pathname}
-          navigate={router.navigate}
-        />
-      </CustomDashboardLayout>
+      <DashboardLayout
+        sx={{
+          ".MuiThemeSwitcher-root": {
+            display: "none !important", // Forcefully hide the theme switcher
+          },
+          ".MuiThemeSwitcher-root + div": {
+            display: "none !important", // Hide following elements related to the switcher
+          },
+        }}
+      >
+        <DemoPageContent pathname={router.pathname} navigate={router.navigate} />
+      </DashboardLayout>
     </AppProvider>
   );
 }

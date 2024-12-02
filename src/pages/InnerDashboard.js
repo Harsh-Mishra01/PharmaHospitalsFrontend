@@ -70,6 +70,7 @@ export default function Dashboard(props) {
       const data = await response.json();
       setAllData("");
       setAllData(data);
+      setLocationProfiles(data.countOfProfiles)
       console.log("+++++++++++++++++ data:" + data.reviewRating[0].averagerating);
       console.log("333333333333 data:" + data.analysis[0]);
     } catch (error) {
@@ -143,7 +144,7 @@ export default function Dashboard(props) {
             locationProfiles[0]["Need Access"],
         },
         { "Verified Profiles": locationProfiles[0]["Verified Profiles"] },
-        { "Unverified Profiles": locationProfiles[0]["Unverfied Profiles"] },
+        { "Unverified Profiles": locationProfiles[0]["Unverified Profiles"] },
         { "Need Access": locationProfiles[0]["Need Access"] },
         { "Not Intrested": locationProfiles[0]["Not Intrested"] },
       ];
