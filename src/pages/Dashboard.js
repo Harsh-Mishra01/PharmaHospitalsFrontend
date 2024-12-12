@@ -91,6 +91,8 @@ export default function DashboardLayoutBasic(props) {
         setSession(null);
         localStorage.removeItem("username");
         localStorage.removeItem("psw");
+        localStorage.removeItem("API");
+        localStorage.clear();
         navigate("/");
       },
     };
