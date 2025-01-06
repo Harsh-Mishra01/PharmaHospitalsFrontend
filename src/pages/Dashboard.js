@@ -5,6 +5,8 @@ import BarChartIcon from "@mui/icons-material/BarChart";
 import BackupTableIcon from "@mui/icons-material/BackupTable";
 import { AppProvider } from "@toolpad/core/AppProvider";
 import { DashboardLayout } from "@toolpad/core/DashboardLayout";
+import { TbMessageStar } from "react-icons/tb";
+
 import "../stylesheet/Dashboard.css";
 import DocReport from "./Doc-Report";
 import InnerDashboard from "./InnerDashboard";
@@ -12,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import Insights from "./Insights";
 import micrologo from "../assets/microlabslogo.png";
 import sitapridelogo from "../assets/sitapridelogo.png";
+import Review from "./Review";
+import RatingDashboard from "../components/RatingDashboard";
 
 const NAVIGATION = [
   {
@@ -33,10 +37,16 @@ const NAVIGATION = [
     title: "Insights",
     icon: <BarChartIcon />,
   },
+  {
+    segment: "review",
+    title: "Review Management",
+    icon: <TbMessageStar className="text-2xl"/>,
+  },
+
 ];
 
 const demoTheme = extendTheme({
-  colorSchemes: { light: true, dark: true },
+  colorSchemes: { light: true, dark: false },
   colorSchemeSelector: "class",
   breakpoints: {
     values: {
@@ -106,6 +116,8 @@ export default function DashboardLayoutBasic(props) {
         return <DocReport />;
       case "/insights":
         return <Insights />;
+      case "/review":
+        return <RatingDashboard/>;
       default:
         return <InnerDashboard />;
     }

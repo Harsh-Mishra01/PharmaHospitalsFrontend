@@ -12,10 +12,6 @@ import ContentContainer from "../components/ContentContainer";
 import SideContentContainer from "../components/SideContentContainer";
 import GraphicalContainer from "../components/GraphicalContainer";
 import ReviewRating from "../components/RewiewRating";
-
-
-
-
 export default function Dashboard(props) {
   const navigate = useNavigate();
   const [showAllData, setAllData] = useState(null);
@@ -40,10 +36,6 @@ export default function Dashboard(props) {
     ? Object.keys(showAllData.graphDataCalls[0])
     : [];
   console.log("Months for Calls:", monthsCalls);
-
-
-  
-
 
   async function getAllData(branch) {
     try {
