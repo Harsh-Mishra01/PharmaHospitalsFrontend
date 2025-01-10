@@ -12,10 +12,12 @@ import DocReport from "./Doc-Report";
 import InnerDashboard from "./InnerDashboard";
 import { useNavigate } from "react-router-dom";
 import Insights from "./Insights";
-import micrologo from "../assets/microlabslogo.png";
-import sitapridelogo from "../assets/sitapridelogo.png";
+
 import Review from "./Review";
 import RatingDashboard from "../components/RatingDashboard";
+
+const logo = localStorage.getItem("logo");
+const logo2 = localStorage.getItem("logo2");
 
 const NAVIGATION = [
   {
@@ -42,7 +44,6 @@ const NAVIGATION = [
     title: "Review Management",
     icon: <TbMessageStar className="text-2xl"/>,
   },
-
 ];
 
 const demoTheme = extendTheme({
@@ -82,7 +83,7 @@ export default function DashboardLayoutBasic(props) {
     user: {
       name: localStorage.getItem("user"),
       email: localStorage.getItem("username"),
-      image: micrologo,
+      image: logo,
     },
   });
 
@@ -93,7 +94,7 @@ export default function DashboardLayoutBasic(props) {
           user: {
             name: localStorage.getItem("user"),
             email: localStorage.getItem("username"),
-            image: micrologo,
+            image: logo,
           },
         });
       },
@@ -101,6 +102,9 @@ export default function DashboardLayoutBasic(props) {
         setSession(null);
         localStorage.removeItem("username");
         localStorage.removeItem("psw");
+        localStorage.removeItem("API");
+        localStorage.removeItem("logo");
+        localStorage.removeItem("logo2");
         navigate("/");
       },
     };
@@ -123,7 +127,7 @@ export default function DashboardLayoutBasic(props) {
     }
   }
 
-  const logo = localStorage.getItem("logo");
+  
 
   return (
     <AppProvider
@@ -133,8 +137,8 @@ export default function DashboardLayoutBasic(props) {
       branding={{
         logo: (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <img src={micrologo} alt="Microlabs logo" style={{ height: "40px" }} />
-            <img src={sitapridelogo} alt="Sitapride logo" style={{ height: "40px" }} />
+            <img src={logo} alt="logo" style={{ height: "40px" }} />
+            {logo2 ?  <img src={logo2} alt="Sitapride logo" style={{ height: "40px" }}  />: ""}
           </div>
         ),
         title: " ",

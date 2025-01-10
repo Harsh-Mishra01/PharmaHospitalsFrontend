@@ -33,7 +33,7 @@ export default function TopDoctorDetails({contextHospitals }) {
       if (getInsightState || getInsightsCity || contextHospitals) {
         console.log("Hello"+ 1)
         try {
-          const response = await fetch(`http://localhost:2024/api/microlabs/topdoc`, {
+          const response = await fetch(api + "/topdoc", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -62,7 +62,7 @@ export default function TopDoctorDetails({contextHospitals }) {
  useEffect(() => {
     async function fetchTopDocdata() {
         try {
-          const response = await fetch(`http://localhost:2024/api/microlabs/topdoc`, {
+          const response = await fetch(api + "/topdoc", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

@@ -28,13 +28,14 @@ const Login = () => {
       localStorage.setItem("username", cred.username);
       localStorage.setItem("psw", cred.psw);
       localStorage.setItem("logo", response[0].Logo);
+      if(response[0].Logo2)
+      {
+        localStorage.setItem("logo2", response[0].Logo2);
+      }
       localStorage.setItem("user", response[0].user);
       localStorage.setItem("API", response[0].API);
-
-
       navigate("/Dashboard");
       window.location.reload();
-
     }
   }
 

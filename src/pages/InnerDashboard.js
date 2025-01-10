@@ -39,7 +39,7 @@ export default function Dashboard(props) {
 
   async function getAllData(branch) {
     try {
-      const response = await fetch(` http://localhost:2024/api/microlabs/${branch}`);
+      const response = await fetch(api+`/${branch}`);
       const data = await response.json();
       console.log("1234 : " + data[0])
       setAllData(data);

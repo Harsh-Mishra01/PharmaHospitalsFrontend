@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiArrowRightCircle } from "react-icons/fi";
+import GridLoader from "react-spinners/GridLoader";
+import BeatLoader from "react-spinners/BeatLoader";
 import { IoMdSend } from "react-icons/io";
 
 const RatingDashboard = () => {
@@ -10,6 +12,7 @@ const RatingDashboard = () => {
     const [error, setError] = useState(null);
     const [popupMessage, setPopupMessage] = useState('');
     const [showPopup, setShowPopup] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const api = localStorage.getItem("API");
 
     const [getReply, setReply] = useState({ FIVE: '', FOUR: '', THREE: '', TWO: '', ONE: '' });
@@ -42,6 +45,7 @@ const RatingDashboard = () => {
         }
 
         async function submitReply(result) {
+            setIsSubmitting(true); // Start Loader
             try {
                 const response = await fetch(api + "/submitReply", {
                     method: "POST",
@@ -78,11 +82,13 @@ const RatingDashboard = () => {
             } catch (error) {
                 setPopupMessage(`❌ Error: ${error.message}`);
                 setShowPopup(true);
+            } finally {
+                setIsSubmitting(false); // Stop Loader
             }
         }
-
         submitReply(result);
     }
+
 
 
     // Fetch data from the backend
@@ -127,7 +133,10 @@ const RatingDashboard = () => {
     }, [api]);
 
     if (loading) {
-        return <div className="loading">Loading...</div>;
+        return <div className="d-flex flex-column justify-content-center align-items-center vh-100">
+            <GridLoader color={"#9693C3"} />
+
+        </div>;
     }
 
     if (error) {
@@ -175,11 +184,18 @@ const RatingDashboard = () => {
                                             value={getReply[rating]}
                                         ></textarea>
                                         <button
-                                            className="flex justify-between items-center bg-[#AAA7CD] hover:bg-blue-700 text-white text-2xl font-bold p-2 rounded"
+                                            className={`flex justify-center items-center ${isSubmitting ? "bg-gray-400" : "bg-[#AAA7CD] hover:bg-blue-700"
+                                                } text-white text-2xl font-bold p-2 rounded`}
                                             onClick={(e) => ReplyReviews(e, rating)}
+                                            disabled={isSubmitting}
                                         >
-                                            <IoMdSend />
+                                            {isSubmitting ? (
+                                                <BeatLoader color={"#fff"} size={5} />
+                                            ) : (
+                                                <IoMdSend />
+                                            )}
                                         </button>
+
                                     </div>
                                 </div>
                             </div>
