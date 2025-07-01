@@ -135,7 +135,6 @@ const RatingDashboard = () => {
     if (loading) {
         return <div className="d-flex flex-column justify-content-center align-items-center vh-100">
             <GridLoader color={"#9693C3"} />
-
         </div>;
     }
 

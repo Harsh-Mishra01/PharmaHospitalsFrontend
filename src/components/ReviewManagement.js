@@ -63,7 +63,7 @@ export default function ReviewManagement() {
                 //     console.error("❌ Failed to submit reply:", data);
                 // }
             } catch (error) {
-                console.error("❌ Error in submitReply:", error.message);
+                console.error("❌ Error in submitReply:", error.message);    
             }
         }
         submitReply(result); // Pass 'result' argument here
@@ -90,7 +90,7 @@ export default function ReviewManagement() {
                     data.fullReview.ONE.length === 0
                 ) {
                     setReview(false);
-                }
+                  }
                 setDocData(data);
             }
             getDocData();
@@ -159,3 +159,4 @@ export default function ReviewManagement() {
         )
     );
 }
+

@@ -15,6 +15,7 @@ import Insights from "./Insights";
 
 import Review from "./Review";
 import RatingDashboard from "../components/RatingDashboard";
+import Post from "./Post";
 
 const logo = localStorage.getItem("logo");
 const logo2 = localStorage.getItem("logo2");
@@ -42,6 +43,11 @@ const NAVIGATION = [
   {
     segment: "review",
     title: "Review Management",
+    icon: <TbMessageStar className="text-2xl"/>,
+  },
+  {
+    segment: "post",
+    title: "Update Post",
     icon: <TbMessageStar className="text-2xl"/>,
   },
 ];
@@ -122,6 +128,8 @@ export default function DashboardLayoutBasic(props) {
         return <Insights />;
       case "/review":
         return <RatingDashboard/>;
+      case "/post":
+        return <Post />;
       default:
         return <InnerDashboard />;
     }

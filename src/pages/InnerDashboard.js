@@ -100,7 +100,7 @@ export default function Dashboard(props) {
     async function getAnalysisData() {
       try {
         const response = await fetch(
-          "http://localhost:2024/api/login",
+          "http://localhost:2024/api/logincare",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
