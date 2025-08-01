@@ -17,7 +17,7 @@ export default function BasicDetailsComponent() {
   const username = localStorage.getItem('username')
 
   const prefix = username ==="piindustries@gmail.com" ? "Shop" : "Dr."
-  const heading = username ==="piindustries@gmail.com" ? "Profiles" : "clinicians"
+  const heading = username ==="piindustries@gmail.com" ? "Shops" : "clinicians"
 
 
 

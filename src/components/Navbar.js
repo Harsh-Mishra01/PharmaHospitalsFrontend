@@ -33,7 +33,7 @@ const [isNavContentsVisible, setNavContentsVisible] = useState(true);
 
 
 const username = localStorage.getItem('username')
-    const heading = username ==="piindustries@gmail.com" ? "Shops" : "Doctors"
+    const heading = username ==="piindustries@gmail.com" ? "Shop Name" : "Doctor Name"
 
 
 
