@@ -14,6 +14,10 @@ export default function BasicDetailsComponent() {
   const [isLoading, setIsLoading] = useState(true)
   var ratingsuggestion = ""
   const api = localStorage.getItem('API')
+  const username = localStorage.getItem('username')
+
+  const prefix = username ==="piindustries@gmail.com" ? "Shop" : "Dr."
+  const heading = username ==="piindustries@gmail.com" ? "Profiles" : "clinicians"
 
 
 
@@ -153,8 +157,8 @@ export default function BasicDetailsComponent() {
             <div className='details'>
               <div className="basi-details">
                 <div className="head p-2">
-                  <span>Dr Name: </span><br />
-                  <span>Dr Mobile: </span>
+                  <span>{prefix} Name: </span><br />
+                  <span>{prefix} Mobile: </span>
                 </div>
                 <div className="content p-2">
                   {
@@ -183,7 +187,7 @@ export default function BasicDetailsComponent() {
           </div>
           <div className="keywords_compititors">
             <div className="maniContainer p-3 m-3" style={{ width: "50%" }}>
-              <h5>Comparision with other clinicians</h5>
+              <h5>Comparision with other {heading}</h5>
               {
                 cRows.length !== 0 && (
                   <TableComponent bcolor="white" title="Competitors" head={cHead} rows={cRows}></TableComponent>

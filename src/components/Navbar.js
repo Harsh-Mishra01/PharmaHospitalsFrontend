@@ -32,8 +32,8 @@ const [isNavContentsVisible, setNavContentsVisible] = useState(true);
 
 
 
-
-
+const username = localStorage.getItem('username')
+    const heading = username ==="piindustries@gmail.com" ? "Shops" : "Doctors"
 
 
 
@@ -297,7 +297,7 @@ function bulkExport() {
                     <input
                       type="text"
                       list="getDoctor"
-                      placeholder="Doctor Name"
+                      placeholder={heading}
                       value={getName}
                       onInputCapture={nameHandelar}
                       style={{

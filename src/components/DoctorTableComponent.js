@@ -7,6 +7,8 @@ import { FaCaretDown } from 'react-icons/fa';
 export default function DoctorTableComponent(props) {
     const [isLoading, setIsLoading] = useState(true);
     const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+    const username = localStorage.getItem('username')
+    const heading = username ==="piindustries@gmail.com" ? "Shops" : "Doctors"
 
     // Handle sorting logic
     const sortedRows = React.useMemo(() => {
@@ -41,7 +43,7 @@ export default function DoctorTableComponent(props) {
 
     return (
         <TableContainer component={Paper} sx={{ margin: '16px', backgroundColor: props.bcolor, opacity: 0.9,  borderRadius : '1rem', width : "97%" }}>
-            <div className='graphs'><h3 style={{ padding: '16px', textAlign: 'center', color: 'white', }}>Top Ten Doctor's Data</h3></div>
+            <div className='graphs'><h3 style={{ padding: '16px', textAlign: 'center', color: 'white', }}>Top Ten {heading}'s Data</h3></div>
             {isLoading ? (
                 <ShimmerTable row={5} col={5} />
             ) : (
