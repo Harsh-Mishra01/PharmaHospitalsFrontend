@@ -6,22 +6,25 @@ import jsPDF from "jspdf";
 
 import DoctorTableComponent from "../components/DoctorTableComponent";
 
-export default function TopDoctorDetails({contextHospitals }) {
+export default function TopDoctorDetails({ contextHospitals }) {
   const [docData, setDocData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [insightdata, setInsightData] = useState(null);
-  
- 
-  const { getDrName, getInsightState, getInsightsCity} =  useContext(SharedContext);
-    
+
+
+  const { getDrName, getInsightState, getInsightsCity } = useContext(SharedContext);
+  const username = localStorage.getItem('username');
+
   const api = localStorage.getItem("API");
 
- 
+  const prefix = username === "piindustries@gmail.com" ? "Shop" : "Dr."
 
-    useEffect(() => { 
-        console.log("getInsightState" + getInsightState + "getInsighCity : " + getInsightsCity + "getContextHospitals : "+contextHospitals);
-    })
-    
+
+
+  useEffect(() => {
+    console.log("getInsightState" + getInsightState + "getInsighCity : " + getInsightsCity + "getContextHospitals : " + contextHospitals);
+  })
+
 
 
   useEffect(() => {
@@ -31,7 +34,7 @@ export default function TopDoctorDetails({contextHospitals }) {
       const cluster = contextHospitals ? "" : getInsightState;
 
       if (getInsightState || getInsightsCity || contextHospitals) {
-        console.log("Hello"+ 1)
+        console.log("Hello" + 1)
         try {
           const response = await fetch(api + "/topdoc", {
             method: "POST",
@@ -56,37 +59,37 @@ export default function TopDoctorDetails({contextHospitals }) {
     }
     fetchDataFilter();
   }, [getInsightState, getInsightsCity, contextHospitals]);
-    
-    
-       
- useEffect(() => {
+
+
+
+  useEffect(() => {
     async function fetchTopDocdata() {
-        try {
-          const response = await fetch(api + "/topdoc", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            
-          });
-          const data = await response.json();
-          setInsightData(data);
-       
-           setIsLoading(false)
-        } catch (error) {
-          console.error("Error fetching filtered data:", error);
-        }
-      
+      try {
+        const response = await fetch(api + "/topdoc", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+        });
+        const data = await response.json();
+        setInsightData(data);
+
+        setIsLoading(false)
+      } catch (error) {
+        console.error("Error fetching filtered data:", error);
+      }
+
     }
     fetchTopDocdata();
-}, []);
+  }, []);
 
 
   const rows = docData?.result
     ? [docData.result]
     : insightdata
-    ? [insightdata]
-    : [];
+      ? [insightdata]
+      : [];
 
   // Function to download PDF
   const downloadPDF = () => {
@@ -101,7 +104,7 @@ export default function TopDoctorDetails({contextHospitals }) {
       const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
       const imgX = (pdfWidth - imgWidth * ratio) / 2;
       const imgY = (pdfHeight - imgHeight * ratio) / 2;
-  
+
       // Set the margins to 0
       pdf.addImage(
         imgData,
@@ -113,11 +116,11 @@ export default function TopDoctorDetails({contextHospitals }) {
         null,
         'FAST' // Optional: Use 'FAST' to speed up the rendering
       );
-  
+
       pdf.save("docreport.pdf");
     });
   };
-  
+
 
   return (
     <>
@@ -127,20 +130,20 @@ export default function TopDoctorDetails({contextHospitals }) {
           <ShimmerTitle line={2} gap={10} variant="primary" /> */}
         </div>
       ) : (
-        (getDrName || getInsightState || getInsightsCity || contextHospitals  ) && (
+        (getDrName || getInsightState || getInsightsCity || contextHospitals) && (
           <div
             id="capture"
-        
+
           >
             {docData ? (
               <div className="maniContainer  ">
-                
+
                 {rows.length > 0 && (
                   <DoctorTableComponent
                     bcolor="white"
                     title="Monthly Improvement Report"
                     head={[
-                      "Dr. Name",
+                      prefix + " Name",
                       "Phone Calls",
                       "Directions Clicks",
                       "Website Clicks",
@@ -160,7 +163,7 @@ export default function TopDoctorDetails({contextHospitals }) {
                     bcolor="white"
                     title="Monthly Improvement Report"
                     head={[
-                      "Dr. Name",
+                      prefix + " Name",
                       "Phone Calls",
                       "Directions Clicks",
                       "Website Clicks",
@@ -168,7 +171,7 @@ export default function TopDoctorDetails({contextHospitals }) {
                       "GS - Desktop",
                       "GM - Mobile",
                       "GM - Desktop",
-                      
+
                     ]}
                     rows={rows}
                   />

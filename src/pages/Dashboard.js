@@ -20,6 +20,10 @@ import Post from "./Post";
 const logo = localStorage.getItem("logo");
 const logo2 = localStorage.getItem("logo2");
 
+const username = localStorage.getItem('username')
+
+const prefix = username === "piindustries@gmail.com" ? "Shop-Report" : "Doc-Report"
+
 const NAVIGATION = [
   {
     kind: "header",
@@ -32,7 +36,7 @@ const NAVIGATION = [
   },
   {
     segment: "DocReport",
-    title: "Doc-Report",
+    title: prefix,
     icon: <BackupTableIcon />,
   },
   {
@@ -43,12 +47,12 @@ const NAVIGATION = [
   {
     segment: "review",
     title: "Review Management",
-    icon: <TbMessageStar className="text-2xl"/>,
+    icon: <TbMessageStar className="text-2xl" />,
   },
   {
     segment: "post",
     title: "Update Post",
-    icon: <TbMessageStar className="text-2xl"/>,
+    icon: <TbMessageStar className="text-2xl" />,
   },
 ];
 
@@ -127,7 +131,7 @@ export default function DashboardLayoutBasic(props) {
       case "/insights":
         return <Insights />;
       case "/review":
-        return <RatingDashboard/>;
+        return <RatingDashboard />;
       case "/post":
         return <Post />;
       default:
@@ -135,7 +139,7 @@ export default function DashboardLayoutBasic(props) {
     }
   }
 
-  
+
 
   return (
     <AppProvider
@@ -146,7 +150,7 @@ export default function DashboardLayoutBasic(props) {
         logo: (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <img src={logo} alt="logo" style={{ height: "40px" }} />
-            {logo2 ?  <img src={logo2} alt="Sitapride logo" style={{ height: "40px" }}  />: ""}
+            {logo2 ? <img src={logo2} alt="Sitapride logo" style={{ height: "40px" }} /> : ""}
           </div>
         ),
         title: " ",

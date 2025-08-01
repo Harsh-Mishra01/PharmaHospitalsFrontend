@@ -14,6 +14,11 @@ export default function BasicDetailsComponent() {
 
   const { getDrName, getInsightState, getInsightsCity, contextHospitals } = useContext(SharedContext);
   const api = localStorage.getItem("API");
+  const username = localStorage.getItem('username');
+
+
+  const prefix = username ==="piindustries@gmail.com" ? "Shop" : "Dr."
+  const heading = username ==="piindustries@gmail.com" ? "Shops" : "clinicians"
 
 
 
@@ -187,9 +192,9 @@ export default function BasicDetailsComponent() {
                 <div className="details">
                   <div className="basi-details">
                     <div className="head p-2">
-                      <span>Dr Name: </span>
+                      <span>{prefix} Name: </span>
                       <br />
-                      <span>Dr Mobile: </span>
+                      <span>{prefix} Mobile: </span>
                     </div>
                     <div className="content p-2">
                       {docData?.finalDetails?.[0] && (
