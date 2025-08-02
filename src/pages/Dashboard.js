@@ -49,11 +49,7 @@ const NAVIGATION = [
     title: "Review Management",
     icon: <TbMessageStar className="text-2xl" />,
   },
-  {
-    segment: "post",
-    title: "Update Post",
-    icon: <TbMessageStar className="text-2xl" />,
-  },
+ 
 ];
 
 const demoTheme = extendTheme({

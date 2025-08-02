@@ -16,7 +16,7 @@ const Login = () => {
   async function signin(e) {
     e.preventDefault();
 
-    const loginHandler = await fetch("http://localhost:2024/api/logincare", {
+    const loginHandler = await fetch("https://gmb.multiplierai.co/api/logincare", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

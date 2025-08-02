@@ -138,7 +138,7 @@ export default function BasicDetailsComponent() {
       const imgY = (pdfHeight - imgHeight * ratio) / 2;
 
       pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-      pdf.save('docreport.pdf');
+      pdf.save('gmbreport.pdf');
     });
   };
 

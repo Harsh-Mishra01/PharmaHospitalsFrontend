@@ -97,53 +97,6 @@ export default function BasicDetailsComponent() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
     const input = document.querySelector("#capture");
     html2canvas(input).then((canvas) => {
@@ -169,7 +122,7 @@ export default function BasicDetailsComponent() {
         'FAST' // Optional: Use 'FAST' to speed up the rendering
       );
   
-      pdf.save("docreport.pdf");
+      pdf.save("gmbreport.pdf");
     });
   };
   
